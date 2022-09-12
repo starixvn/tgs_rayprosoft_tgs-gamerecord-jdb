@@ -9,9 +9,9 @@ data:
       "GameRecordInfo": {
         "GameProviderCode": "JDBTF",
         "MinIntervalMinute": 1,
-        "MaxIntervalMinute": 10,
+        "MaxIntervalMinute": 5,
         "IntervalMinute": 3,
-        "LockMinute": 1.5
+        "LockMinute": 2
       },
       "GameRecord": {
          "GameProvidersQueryServerBaseUrl": "http://game-gameprovider-queryserver/",
