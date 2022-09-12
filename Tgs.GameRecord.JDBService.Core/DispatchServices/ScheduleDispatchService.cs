@@ -36,7 +36,7 @@ internal class ScheduleDispatchService : ICommandService<ScheduleDispatchCommand
             {
                 try
                 {
-                    var endTime = DateTime.Parse(DateTime.UtcNow.ToString(@"yyyy-MM-dd\THH:mm:00K"));
+                    var endTime = DateTimeOffset.ParseExact(DateTimeOffset.UtcNow.ToString(@"yyyy-MM-dd\THH:mm:00K"), @"yyyy-MM-dd\THH:mm:ssK", null, styles: System.Globalization.DateTimeStyles.RoundtripKind);
 
                     var startTime = endTime.AddMinutes(_intervalMinute * -1);
 
@@ -46,8 +46,8 @@ internal class ScheduleDispatchService : ICommandService<ScheduleDispatchCommand
                          AesKey: command.AesKey,
                          AesIV: command.AesIV,
                          Agent: command.Agent,
-                         StartTime: startTime,
-                         EndTime: endTime);
+                         StartTime: startTime.UtcDateTime,
+                         EndTime: endTime.UtcDateTime);
 
                     await _commandService
                             .ExecuteAsync(
