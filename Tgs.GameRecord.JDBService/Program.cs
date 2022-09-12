@@ -84,11 +84,11 @@ builder.Services
              var configuration = sp.GetRequiredService<IConfiguration>();
              options.Url = configuration.GetConnectionString("Nats");
          })
-         .AddHandler<ScheduleMessageHandler>("gp.gamerecord.schedule.jdb", "gp.gamerecord.schedule")
-         .AddProcessor<ManualMessageHandler>("gp.gamerecord.manual.jdb", "gp.gamerecord.manual");
+         .AddHandler<ScheduleMessageHandler>("gp.gamerecord.schedule.jdbtf", "gp.gamerecord.schedule")
+         .AddProcessor<ManualMessageHandler>("gp.gamerecord.manual.jdbtf", "gp.gamerecord.manual");
      })
      .ClearAllExchanges()
-     .AddMongoGlobPatternExchange("tgs.gp.gamerecord.database.round.jdb", "gp.gamerecord.database", "tgs.gp.gamerecord.database.round.jdb");
+     .AddMongoGlobPatternExchange("tgs.gp.gamerecord.database.round.jdbtf", "gp.gamerecord.database", "tgs.gp.gamerecord.database.round.jdbtf");
 
 builder.Services
      .AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
