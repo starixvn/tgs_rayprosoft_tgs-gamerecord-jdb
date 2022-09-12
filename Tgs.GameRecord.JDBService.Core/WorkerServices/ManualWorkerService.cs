@@ -41,13 +41,11 @@ internal class ManualWorkerService : ICommandService<ManualWorkerCommand>
             command,
             gameHistoryInfos);
 
-        if (!gameHistoryInfos.Any())
+        if (gameHistoryInfos.Any())
         {
-            return;
+            await _service.ExecuteAsync(new GamePullRecordCommand(
+                Records: gameHistoryInfos), cancellationToken: cancellationToken).ConfigureAwait(false);
         }
-
-        await _service.ExecuteAsync(new GamePullRecordCommand(
-                       Records: gameHistoryInfos), cancellationToken: cancellationToken).ConfigureAwait(false);
 
         gameHistoryInfos = await _client
                 .GameOldHistoryAsync(
@@ -66,12 +64,11 @@ internal class ManualWorkerService : ICommandService<ManualWorkerCommand>
             command,
             gameHistoryInfos);
 
-        if (!gameHistoryInfos.Any())
+        if (gameHistoryInfos.Any())
         {
-            return;
+            await _service.ExecuteAsync(new GamePullRecordCommand(
+                Records: gameHistoryInfos), cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        await _service.ExecuteAsync(new GamePullRecordCommand(
-                       Records: gameHistoryInfos), cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }
