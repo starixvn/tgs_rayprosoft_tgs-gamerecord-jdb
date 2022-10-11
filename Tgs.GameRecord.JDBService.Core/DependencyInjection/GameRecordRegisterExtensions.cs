@@ -1,4 +1,5 @@
-﻿using Tgs.GameRecord.JDBService.Core;
+﻿using Microsoft.AspNetCore.Builder;
+using Tgs.GameRecord.JDBService.Core;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

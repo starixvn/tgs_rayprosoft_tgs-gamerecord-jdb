@@ -1,4 +1,4 @@
-﻿namespace Tgs.GameRecord.JDBService.ViewModels;
+﻿namespace Tgs.GameRecord.JDBManualService.ViewModels;
 
 public record GameRecordQueryViewModel(
     Uri ApiUrl,
