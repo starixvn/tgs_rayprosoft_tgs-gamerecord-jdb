@@ -52,7 +52,6 @@ internal class ManualWorkerService : ICommandService<ManualWorkerCommand>
                 Records: gameHistoryInfos), cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-
         //每次查詢時間範圍最多為 5 分鐘。提供超過 2 小時至 60 天內交易信息。
         //當前時間22/09/12 14:15
         //查詢時間22/09/12 14:15~14:00會回應{"status":"8006","err_text":"Time does not meet."}
@@ -80,6 +79,5 @@ internal class ManualWorkerService : ICommandService<ManualWorkerCommand>
             await _service.ExecuteAsync(new GamePullRecordCommand(
                 Records: gameHistoryInfos), cancellationToken: cancellationToken).ConfigureAwait(false);
         }
-
     }
 }

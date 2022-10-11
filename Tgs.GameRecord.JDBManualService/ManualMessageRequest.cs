@@ -1,4 +1,4 @@
-﻿namespace Tgs.GameRecord.JDBService;
+﻿namespace Tgs.GameRecord.JDBManualService;
 
 public record ManualMessageRequest(
     Uri ApiUrl,

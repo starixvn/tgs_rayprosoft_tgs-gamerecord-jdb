@@ -47,8 +47,8 @@ Selector labels
 */}}
 {{- define "game-gamerecord-jdb-service.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "game-gamerecord-jdb-service.name" . }}
-app: {{ include "game-gamerecord-jdb-service.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: {{ include "game-gamerecord-jdb-service.name" . }}
 tgs.kind: game
 tgs.game.kind: gamerecord
 tgs.gameprovider.kind: jdb

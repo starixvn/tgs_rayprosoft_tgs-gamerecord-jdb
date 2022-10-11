@@ -1,3 +1,3 @@
-﻿namespace Tgs.GameRecord.JDBService;
+﻿namespace Tgs.GameRecord.JDBManualService;
 
 public record ManualMessageResponse(bool Success);

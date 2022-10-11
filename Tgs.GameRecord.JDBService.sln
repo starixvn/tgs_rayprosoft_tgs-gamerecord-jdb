@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.JDBService",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.JDBService.Core", "Tgs.GameRecord.JDBService.Core\Tgs.GameRecord.JDBService.Core.csproj", "{D4806A63-B319-4AD8-B0FD-1A5CB9895229}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.JDBManualService", "Tgs.GameRecord.JDBManualService\Tgs.GameRecord.JDBManualService.csproj", "{8A408EED-FB4B-48D4-9555-22F2FAC8C8A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{D4806A63-B319-4AD8-B0FD-1A5CB9895229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4806A63-B319-4AD8-B0FD-1A5CB9895229}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4806A63-B319-4AD8-B0FD-1A5CB9895229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A408EED-FB4B-48D4-9555-22F2FAC8C8A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A408EED-FB4B-48D4-9555-22F2FAC8C8A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A408EED-FB4B-48D4-9555-22F2FAC8C8A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A408EED-FB4B-48D4-9555-22F2FAC8C8A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
