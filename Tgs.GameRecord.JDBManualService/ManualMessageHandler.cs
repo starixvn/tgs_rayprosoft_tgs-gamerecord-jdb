@@ -4,7 +4,7 @@ using Tgs.GameRecord.JDBService.Core.WorkerServices;
 using Tgs.MessageQueue;
 using Tgs.ServiceUtility;
 
-namespace Tgs.GameRecord.JDBService;
+namespace Tgs.GameRecord.JDBManualService;
 
 public class ManualMessageHandler : IMessageProcessor
 {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tgs.GameRecord.JDBManualService.ViewModels;
 using Tgs.GameRecord.JDBService.Core.WorkerServices;
-using Tgs.GameRecord.JDBService.ViewModels;
 using Tgs.ServiceUtility;
 
-namespace Tgs.GameRecord.JDBService.Controllers;
+namespace Tgs.GameRecord.JDBManualService.Controllers;
 
 [ApiController]
 [Route("jdbtf")]

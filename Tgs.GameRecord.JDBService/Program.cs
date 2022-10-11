@@ -4,6 +4,7 @@ using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Tgs.GameRecord.JDBService;
+using Tgs.GameRecord.JDBService.Core;
 using Tgs.MessageQueue.MongoDB.Configuration;
 using MongoMessageQueue = MongoDB.Messaging.MessageQueue;
 
@@ -63,13 +64,15 @@ builder.Services.AddGameRecordCore((options, sp) =>
 },
 (sp) => sp.GetRequiredService<RedisConnectionManager>().Database);
 
+var gameRecordInfo = builder.Configuration.GetSection("GameRecordInfo").Get<GameRecordInfoOptions>();
+
 builder.Services
     .AddMessageQueue()
     .AddMongoMessageQueue(config =>
     {
         _ = config
         .DefineMessageQueue(
-            "gp.gamerecord.database",
+            gameRecordInfo.MongoDefine,
             sp => new MongoMessageQueueBuilderOptions
             {
                 MessageQueue = MongoMessageQueue.Default,
@@ -84,11 +87,10 @@ builder.Services
              var configuration = sp.GetRequiredService<IConfiguration>();
              options.Url = configuration.GetConnectionString("Nats");
          })
-         .AddHandler<ScheduleMessageHandler>("gp.gamerecord.schedule.jdbtf", "gp.gamerecord.schedule")
-         .AddProcessor<ManualMessageHandler>("gp.gamerecord.manual.jdbtf", "gp.gamerecord.manual");
+         .AddHandler<ScheduleMessageHandler>("gp.gamerecord.schedule.jdbtf", "gp.gamerecord.schedule");
      })
      .ClearAllExchanges()
-     .AddMongoGlobPatternExchange("tgs.gp.gamerecord.database.round.jdbtf", "gp.gamerecord.database", "tgs.gp.gamerecord.database.round.jdbtf");
+     .AddMongoGlobPatternExchange(gameRecordInfo.MongoGlobPattern, gameRecordInfo.MongoDefine, gameRecordInfo.MongoGlobPattern);
 
 builder.Services
      .AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
@@ -142,7 +144,6 @@ _ = app.UseSwaggerUI();
 _ = app.UseAuthorization();
 
 _ = app.MapControllers();
-
 
 _ = app.UseGameRecordRegister();
 
