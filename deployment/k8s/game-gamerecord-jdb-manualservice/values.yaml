@@ -1,19 +1,19 @@
-# Default values for game-gamerecord-jdb-service.
+# Default values for game-gamerecord-jdb-manualservice.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: pgtgs/game-gamerecord-jdb-service
+  repository: pgtgs/game-gamerecord-jdb-manualservice
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
 imagePullSecrets:
   - name: dockerhub
-nameOverride: "game-gamerecord-jdb-service"
-fullnameOverride: "game-gamerecord-jdb-service"
+nameOverride: "game-gamerecord-jdb-manualservice"
+fullnameOverride: "game-gamerecord-jdb-manualservice"
 
 serviceAccount:
   # Specifies whether a service account should be created
