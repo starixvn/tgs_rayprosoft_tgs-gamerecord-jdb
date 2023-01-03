@@ -29,13 +29,25 @@ internal class GamePullRecordCommandService : ICommandService<GamePullRecordComm
 
     public async ValueTask ExecuteAsync(GamePullRecordCommand command, CancellationToken cancellationToken = default)
     {
-        var gameProviderId = await _utensil.GetGameProviderIdAsync().ConfigureAwait(false);
+        var gameProviderId = await _utensil
+            .GetGameProviderIdAsync(
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         foreach (var record in command.Records)
         {
             bool success = true;
-            var playerModel = await _utensil.GetPlayerAsync(record.PlayerCode).ConfigureAwait(false);
-            var gameId = await _utensil.GetGameIdAsync(gameProviderId, record.ExternalGameId).ConfigureAwait(false);
+            var playerModel = await _utensil
+                .GetPlayerAsync(
+                    playerCode: record.PlayerCode,
+                    cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+            var gameId = await _utensil
+                .GetGameIdAsync(
+                    gameProviderId: gameProviderId,
+                    gameExternalId: record.ExternalGameId,
+                    cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
             if (playerModel == null || !gameId.HasValue)
             {
                 success = false;
@@ -44,7 +56,12 @@ internal class GamePullRecordCommandService : ICommandService<GamePullRecordComm
             Guid? gameProviderConfigurationId = default;
             if (playerModel != null)
             {
-                gameProviderConfigurationId = await _utensil.BrandGetGameProviderConfigurationIdAsync(playerModel.BrandId, gameProviderId).ConfigureAwait(false);
+                gameProviderConfigurationId = await _utensil
+                    .BrandGetGameProviderConfigurationIdAsync(
+                        brandId: playerModel.BrandId,
+                        gameProviderId: gameProviderId,
+                        cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
                 if (!gameProviderConfigurationId.HasValue)
                 {
                     success = false;

@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Resources;
@@ -60,7 +60,7 @@ builder.Services.AddGameRecordCore((options, sp) =>
 (options, sp) =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
-    options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameProvidersQueryServerBaseUrl");
+    options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameCommandClientBaseUrl");
 },
 (sp) => sp.GetRequiredService<RedisConnectionManager>().Database);
 
@@ -124,9 +124,10 @@ builder.Services
                 || !httpContext.Request.Path.StartsWithSegments("/swagger")
                 && !httpContext.Request.Path.StartsWithSegments("/healthz")
                 && !httpContext.Request.Path.StartsWithSegments("/profiler/")
+                && !httpContext.Request.Path.StartsWithSegments("/hangfire")
                 && !httpContext.Request.Path.StartsWithSegments("/metrics")
-                && !new[] { "html", "ico", "png", "jpg" }.Any(
-                    ext => httpContext.Request.Path.Value.EndsWith($".{ext}"));
+                   && !new[] { "html", "ico", "png", "jpg" }.Any(
+                       ext => httpContext.Request.Path.Value.EndsWith($".{ext}"));
         };
     });
 
