@@ -1,4 +1,4 @@
-﻿namespace Tgs.GameRecord.JDBManualService;
+﻿namespace Tgs.GameRecord.JDBService.Core;
 
 public record RedisOptions
 {

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using StackExchange.Redis;
 using Tgs.GameCommand.Client;
 using Tgs.GameInterface.JDBService.Client;
 using Tgs.GameRecord.JDBService.Core;
@@ -10,21 +9,28 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddGameRecordCore(
         this IServiceCollection services,
+        Action<RedisOptions, IServiceProvider> redisDBconfigure,
         Action<GameRecordInfoOptions, IServiceProvider> gameRecordInfoOptions,
+        Action<MongoSettingOptions, IServiceProvider> mongoSettingOptions,
         Action<GameInterfaceJDBClientOptions, IServiceProvider> gameInterfaceJDBClientOptions,
-        Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions,
-        Func<IServiceProvider, IDatabase> redisDatabaseResolver
-        )
+        Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions)
         => services
+            .AddOptions<RedisOptions>()
+            .Configure(redisDBconfigure)
+            .Services
             .AddOptions<GameRecordInfoOptions>()
             .Configure(gameRecordInfoOptions)
+            .Services
+            .AddOptions<MongoSettingOptions>()
+            .Configure(mongoSettingOptions)
             .Services
             .RegisterAllServiceUtilityTypes(
                 Assembly.GetExecutingAssembly(),
                 ServiceLifetime.Transient)
             .AddGameInterfaceJDBServiceClient(gameInterfaceJDBClientOptions)
             .AddGameCommandClient(gameCommandClientOptions)
-            .AddTransient<IScheduleDispatch>(sp => ActivatorUtilities.CreateInstance<ScheduleDispatch>(sp, redisDatabaseResolver(sp)))
-            .AddTransient<IUtensil, UtensilRepository>()
-            .Decorate<IUtensil>((innerRepository, sp) => ActivatorUtilities.CreateInstance<UtensilMemoryCacheRepository>(sp, innerRepository, TimeSpan.FromHours(1)));
+            .AddMemoryCache()
+            .AddSingleton<RedisConnectionManager>()
+            .AddTransient<IScheduleDispatch>(sp => ActivatorUtilities.CreateInstance<ScheduleDispatch>(sp, sp.GetRequiredService<RedisConnectionManager>().Database))
+            .AddTransient<IUtensil>(sp => ActivatorUtilities.CreateInstance<UtensilRepository>(sp, TimeSpan.FromHours(1)));
 }

@@ -7,11 +7,9 @@ data:
   appsettings.json: |
     {
       "GameRecordInfo": {
-        "MongoDefine": "gp.gamerecord.database",
-        "MongoGlobPattern": "tgs.gp.gamerecord.database.round.jdbtf",
         "GameProviderCode": "JDBTF",
-        "MinIntervalMinute": 1,
-        "MaxIntervalMinute": 5,
+        "MinimumIntervalMinute": 1,
+        "MaximumIntervalMinute": 5,
         "IntervalMinute": 3,
         "LockMinute": 2
       },

@@ -20,10 +20,10 @@ internal class ScheduleDispatchService : ICommandService<ScheduleDispatchCommand
         _gameRecordInfoOptions = options.Value;
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _scheduleDispatch = scheduleDispatch ?? throw new ArgumentNullException(nameof(scheduleDispatch));
-        _intervalMinute = (_gameRecordInfoOptions.IntervalMinute > _gameRecordInfoOptions.MaxIntervalMinute)
-                        ? _gameRecordInfoOptions.MaxIntervalMinute
-                        : (_gameRecordInfoOptions.IntervalMinute < _gameRecordInfoOptions.MinIntervalMinute)
-                        ? _gameRecordInfoOptions.MinIntervalMinute
+        _intervalMinute = (_gameRecordInfoOptions.IntervalMinute > _gameRecordInfoOptions.MaximumIntervalMinute)
+                        ? _gameRecordInfoOptions.MaximumIntervalMinute
+                        : (_gameRecordInfoOptions.IntervalMinute < _gameRecordInfoOptions.MinimumIntervalMinute)
+                        ? _gameRecordInfoOptions.MinimumIntervalMinute
                         : _gameRecordInfoOptions.IntervalMinute;
     }
 
