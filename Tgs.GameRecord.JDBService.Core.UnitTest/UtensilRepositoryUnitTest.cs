@@ -15,9 +15,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "JDBTF",
-            MinimumIntervalMinute = 1d,
-            MaximumIntervalMinute = 5d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 10d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -72,9 +72,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "JDBTF",
-            MinimumIntervalMinute = 1d,
-            MaximumIntervalMinute = 5d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 10d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -129,9 +129,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "JDBTF",
-            MinimumIntervalMinute = 1d,
-            MaximumIntervalMinute = 5d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 10d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -179,9 +179,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "JDBTF",
-            MinimumIntervalMinute = 1d,
-            MaximumIntervalMinute = 5d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 10d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -220,9 +220,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "JDBTF",
-            MinimumIntervalMinute = 1d,
-            MaximumIntervalMinute = 5d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 10d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();

@@ -1,4 +1,4 @@
-apiVersion: v1
+﻿apiVersion: v1
 kind: ConfigMap
 metadata:
   name: configmap-{{ include "game-gamerecord-jdb-manualservice.name" . }}
@@ -8,9 +8,9 @@ data:
     {
       "GameRecordInfo": {
         "GameProviderCode": "JDBTF",
-        "MinimumIntervalMinute": 1,
-        "MaximumIntervalMinute": 5,
         "IntervalMinute": 3,
+        "IntervalMinutesMax": 5,
+        "IntervalMinutesMinimum": 1,
         "LockMinute": 2
       },
       "GameRecord": {
