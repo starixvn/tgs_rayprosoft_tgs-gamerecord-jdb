@@ -33,7 +33,7 @@ public class GameRecordUtensilUnitTest
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderId);
 
-        var gameProviderCode = "FACHAI";
+        var gameProviderCode = "JDBTF";
         _ = fakeUtensil
             .GetGameProviderCode()
             .Returns(gameProviderCode);
@@ -126,7 +126,7 @@ public class GameRecordUtensilUnitTest
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderId);
 
-        var gameProviderCode = "FACHAI";
+        var gameProviderCode = "JDBTF";
         _ = fakeUtensil
             .GetGameProviderCode()
             .Returns(gameProviderCode);
@@ -219,7 +219,7 @@ public class GameRecordUtensilUnitTest
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderId);
 
-        var gameProviderCode = "FACHAI";
+        var gameProviderCode = "JDBTF";
         _ = fakeUtensil
             .GetGameProviderCode()
             .Returns(gameProviderCode);
@@ -313,7 +313,7 @@ public class GameRecordUtensilUnitTest
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderId);
 
-        var gameProviderCode = "FACHAI";
+        var gameProviderCode = "JDBTF";
         _ = fakeUtensil
             .GetGameProviderCode()
             .Returns(gameProviderCode);

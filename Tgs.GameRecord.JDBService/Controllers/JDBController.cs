@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Tgs.GameRecord.JDBService.Core;
+using Tgs.GameRecord.JDBService.ViewModels;
 using Tgs.GameRounds.Schedule.Client;
 using Tgs.GameRounds.Schedule.Protos;
-using Tgs.GameRecord.JDBService.ViewModels;
 
 namespace Tgs.GameRecord.JDBService.Controllers;
 
