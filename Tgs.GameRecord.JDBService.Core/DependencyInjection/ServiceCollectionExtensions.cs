@@ -2,6 +2,7 @@
 using Tgs.GameCommand.Client;
 using Tgs.GameInterface.JDBService.Client;
 using Tgs.GameRecord.JDBService.Core;
+using Tgs.GameRounds.Schedule.Client;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +12,9 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         Action<RedisOptions, IServiceProvider> redisDBconfigure,
         Action<GameRecordInfoOptions, IServiceProvider> gameRecordInfoOptions,
-        Action<MongoSettingOptions, IServiceProvider> mongoSettingOptions,
-        Action<GameInterfaceJDBClientOptions, IServiceProvider> gameInterfaceJDBClientOptions,
-        Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions)
+        Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions,
+        Action<GameRoundsScheduleClientOptions, IServiceProvider> gameRoundsScheduleClientOptions,
+        Action<GameInterfaceJDBClientOptions, IServiceProvider> gameInterfaceJDBClientOptions)
         => services
             .AddOptions<RedisOptions>()
             .Configure(redisDBconfigure)
@@ -21,16 +22,18 @@ public static class ServiceCollectionExtensions
             .AddOptions<GameRecordInfoOptions>()
             .Configure(gameRecordInfoOptions)
             .Services
-            .AddOptions<MongoSettingOptions>()
-            .Configure(mongoSettingOptions)
-            .Services
             .RegisterAllServiceUtilityTypes(
                 Assembly.GetExecutingAssembly(),
                 ServiceLifetime.Transient)
-            .AddGameInterfaceJDBServiceClient(gameInterfaceJDBClientOptions)
-            .AddGameCommandClient(gameCommandClientOptions)
             .AddMemoryCache()
             .AddSingleton<RedisConnectionManager>()
-            .AddTransient<IScheduleDispatch>(sp => ActivatorUtilities.CreateInstance<ScheduleDispatch>(sp, sp.GetRequiredService<RedisConnectionManager>().Database))
-            .AddTransient<IUtensil>(sp => ActivatorUtilities.CreateInstance<UtensilRepository>(sp, TimeSpan.FromHours(1)));
+            .AddGameCommandClient(gameCommandClientOptions)
+            .AddGameRoundsScheduleClient(gameRoundsScheduleClientOptions)
+            .AddGameInterfaceJDBServiceClient(gameInterfaceJDBClientOptions)
+            .AddGameRoundsWorkClient()
+            .AddGameRoundsWorkManualClient()
+            .AddSingleton<IScheduleFormDispatcher, ScheduleFormDispatcher>()
+            .AddSingleton<IScheduleFormLock>(sp => ActivatorUtilities.CreateInstance<ScheduleFormLock>(sp, sp.GetRequiredService<RedisConnectionManager>().Database))
+            .AddTransient<IUtensil>(sp => ActivatorUtilities.CreateInstance<UtensilRepository>(sp, TimeSpan.FromHours(1)))
+            .AddSingleton<IGameRecordUtensil, GameRecordUtensil>();
 }
