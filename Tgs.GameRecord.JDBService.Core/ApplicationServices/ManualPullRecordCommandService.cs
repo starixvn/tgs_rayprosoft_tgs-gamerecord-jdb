@@ -27,7 +27,7 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
     public async ValueTask ExecuteAsync(ManualPullRecordCommand command, CancellationToken cancellationToken = default)
     {
         var gameRecords = await _client
-            .GameHistoryAsync(
+            .GameOldHistoryAsync(
                 apiUrl: command.ApiUrl,
                 domain: command.Domain,
                 aesKey: command.AesKey,
