@@ -39,7 +39,7 @@ public class ManualPullRecordCommandServiceUnitTest
 
         _ = await fakeClient
             .Received(1)
-            .GameHistoryAsync(
+            .GameOldHistoryAsync(
                 apiUrl: Arg.Is(command.ApiUrl),
                 domain: Arg.Is(command.Domain),
                 aesKey: Arg.Is(command.AesKey),
