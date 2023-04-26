@@ -11,16 +11,19 @@ internal class UtensilRepository : IUtensil
     private readonly IGameCommandClient _client;
     private readonly GameRecordInfoOptions _gameRecordInfo;
     private readonly IMemoryCache _memoryCache;
+    private readonly ISystemClock _systemClock;
 
     public UtensilRepository(
         IOptions<GameRecordInfoOptions> options,
         IGameCommandClient client,
         IMemoryCache memoryCache,
+        ISystemClock systemClock,
         TimeSpan absoluteExpirationRelativeToNow)
     {
         _gameRecordInfo = options.Value;
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
+        _systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
         _absoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow;
     }
 
@@ -122,5 +125,12 @@ internal class UtensilRepository : IUtensil
             }
         }
         return playerModel;
+    }
+
+    public bool TimeDifferenceWithin2Hours(DateTimeOffset source)
+    {
+        var hours = _systemClock.CurrentTime.Subtract(source).TotalHours;
+
+        return hours is > 0 and <= 2;
     }
 }

@@ -17,6 +17,7 @@ public class UtensilRepositoryUnitTest
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
         var brandId = Guid.NewGuid();
@@ -42,6 +43,7 @@ public class UtensilRepositoryUnitTest
             gameRecordInfo,
             fakeClient,
             fakeMemoryCache,
+            fakeSystemClock,
             absoluteExpirationRelativeToNow);
 
         var actual = await repository
@@ -70,6 +72,7 @@ public class UtensilRepositoryUnitTest
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
         var gameProviderId = Guid.NewGuid();
@@ -95,6 +98,7 @@ public class UtensilRepositoryUnitTest
             gameRecordInfo,
             fakeClient,
             fakeMemoryCache,
+            fakeSystemClock,
             absoluteExpirationRelativeToNow);
 
         var actual = await repository
@@ -123,6 +127,7 @@ public class UtensilRepositoryUnitTest
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
         var key = $"gamerecord:{gameRecordInfo.Value.GameProviderCode}";
@@ -144,6 +149,7 @@ public class UtensilRepositoryUnitTest
             gameRecordInfo,
             fakeClient,
             fakeMemoryCache,
+            fakeSystemClock,
             absoluteExpirationRelativeToNow);
 
         var actual = await repository
@@ -168,6 +174,7 @@ public class UtensilRepositoryUnitTest
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
         var key = $"{gameRecordInfo.Value.GameProviderCode}";
@@ -188,6 +195,7 @@ public class UtensilRepositoryUnitTest
             gameRecordInfo,
             fakeClient,
             fakeMemoryCache,
+            fakeSystemClock,
             absoluteExpirationRelativeToNow);
 
         _ = await Assert.ThrowsAsync<Exception>(() => repository
@@ -205,6 +213,7 @@ public class UtensilRepositoryUnitTest
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
         var playerCode = "test";
@@ -238,6 +247,7 @@ public class UtensilRepositoryUnitTest
             gameRecordInfo,
             fakeClient,
             fakeMemoryCache,
+            fakeSystemClock,
             absoluteExpirationRelativeToNow);
 
         var actual = await repository
@@ -253,5 +263,160 @@ public class UtensilRepositoryUnitTest
             .Set(
                 key: key,
                 player);
+    }
+    [Fact]
+    public void Time_Difference_Within_2_Hours_Less_Than_10_Seconds_True()
+    {
+        var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+        {
+            GameProviderCode = "FACHAI"
+        });
+        var fakeClient = Substitute.For<IGameCommandClient>();
+        var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
+        var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+        _ = fakeSystemClock.CurrentTime.Returns(DateTimeOffset.Parse("2023-04-13T13:00:00+08:00"));
+
+        var repository = new UtensilRepository(
+            gameRecordInfo,
+            fakeClient,
+            fakeMemoryCache,
+            fakeSystemClock,
+            absoluteExpirationRelativeToNow);
+
+        var actual = repository.TimeDifferenceWithin2Hours(source: DateTimeOffset.Parse("2023-04-13T12:59:50+08:00"));
+
+        Assert.True(actual);
+    }
+
+    [Fact]
+    public void Time_Difference_Within_2_Hours_Less_Than_2_Hours_True()
+    {
+        var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+        {
+            GameProviderCode = "FACHAI"
+        });
+        var fakeClient = Substitute.For<IGameCommandClient>();
+        var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
+        var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+        _ = fakeSystemClock.CurrentTime.Returns(DateTimeOffset.Parse("2023-04-13T13:00:00+08:00"));
+
+        var repository = new UtensilRepository(
+            gameRecordInfo,
+            fakeClient,
+            fakeMemoryCache,
+            fakeSystemClock,
+            absoluteExpirationRelativeToNow);
+
+        var actual = repository.TimeDifferenceWithin2Hours(source: DateTimeOffset.Parse("2023-04-13T11:00:00+08:00"));
+
+        Assert.True(actual);
+    }
+
+    [Fact]
+    public void Time_Difference_Within_2_Hours_Less_Than_20_Minutes_True()
+    {
+        var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+        {
+            GameProviderCode = "FACHAI"
+        });
+        var fakeClient = Substitute.For<IGameCommandClient>();
+        var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
+        var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+        _ = fakeSystemClock.CurrentTime.Returns(DateTimeOffset.Parse("2023-04-13T13:00:00+08:00"));
+
+        var repository = new UtensilRepository(
+            gameRecordInfo,
+            fakeClient,
+            fakeMemoryCache,
+            fakeSystemClock,
+            absoluteExpirationRelativeToNow);
+
+        var actual = repository.TimeDifferenceWithin2Hours(source: DateTimeOffset.Parse("2023-04-13T12:40:00+08:00"));
+
+        Assert.True(actual);
+    }
+
+    [Fact]
+    public void Time_Difference_Within_2_Hours_More_Than_10_Seconds_False()
+    {
+        var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+        {
+            GameProviderCode = "FACHAI"
+        });
+        var fakeClient = Substitute.For<IGameCommandClient>();
+        var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
+        var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+        _ = fakeSystemClock.CurrentTime.Returns(DateTimeOffset.Parse("2023-04-13T13:00:00+08:00"));
+
+        var repository = new UtensilRepository(
+            gameRecordInfo,
+            fakeClient,
+            fakeMemoryCache,
+            fakeSystemClock,
+            absoluteExpirationRelativeToNow);
+
+        var actual = repository.TimeDifferenceWithin2Hours(source: DateTimeOffset.Parse("2023-04-13T13:00:10+08:00"));
+
+        Assert.False(actual);
+    }
+
+    [Fact]
+    public void Time_Difference_Within_2_Hours_More_Than_2_Hours_False()
+    {
+        var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+        {
+            GameProviderCode = "FACHAI"
+        });
+        var fakeClient = Substitute.For<IGameCommandClient>();
+        var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
+        var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+        _ = fakeSystemClock.CurrentTime.Returns(DateTimeOffset.Parse("2023-04-13T13:00:00+08:00"));
+
+        var repository = new UtensilRepository(
+            gameRecordInfo,
+            fakeClient,
+            fakeMemoryCache,
+            fakeSystemClock,
+            absoluteExpirationRelativeToNow);
+
+        var actual = repository.TimeDifferenceWithin2Hours(source: DateTimeOffset.Parse("2023-04-13T15:00:00+08:00"));
+
+        Assert.False(actual);
+    }
+
+    [Fact]
+    public void Time_Difference_Within_2_Hours_More_Than_20_Minutes_False()
+    {
+        var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+        {
+            GameProviderCode = "FACHAI"
+        });
+        var fakeClient = Substitute.For<IGameCommandClient>();
+        var fakeMemoryCache = Substitute.For<IMemoryCache>();
+        var fakeSystemClock = Substitute.For<ISystemClock>();
+        var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+        _ = fakeSystemClock.CurrentTime.Returns(DateTimeOffset.Parse("2023-04-13T13:00:00+08:00"));
+
+        var repository = new UtensilRepository(
+            gameRecordInfo,
+            fakeClient,
+            fakeMemoryCache,
+            fakeSystemClock,
+            absoluteExpirationRelativeToNow);
+
+        var actual = repository.TimeDifferenceWithin2Hours(source: DateTimeOffset.Parse("2023-04-13T13:20:00+08:00"));
+
+        Assert.False(actual);
     }
 }
