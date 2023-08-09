@@ -5,17 +5,17 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.JDBService.Core.ApplicationServices;
 
-internal class ScheduleHandleRecordCommandService : ICommandService<ScheduleHandleRecordCommand>
+internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
 {
     private readonly IGameRoundsWorkClient _client;
 
-    public ScheduleHandleRecordCommandService(
+    public HandleRecordCommandService(
         IGameRoundsWorkClient client)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
-    public async ValueTask ExecuteAsync(ScheduleHandleRecordCommand command, CancellationToken cancellationToken = default)
+    public async ValueTask ExecuteAsync(HandleRecordCommand command, CancellationToken cancellationToken = default)
     {
         if (command.Record.Success)
         {

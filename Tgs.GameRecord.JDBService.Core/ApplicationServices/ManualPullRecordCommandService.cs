@@ -8,17 +8,17 @@ namespace Tgs.GameRecord.JDBService.Core.ApplicationServices;
 internal class ManualPullRecordCommandService : ICommandService<ManualPullRecordCommand>
 {
     private readonly IGameInterfaceJDBClient _client;
-    private readonly IUtensil _utensil;
     private readonly IGameRecordUtensil _gameRecordUtensil;
     private readonly ILogger<ManualPullRecordCommandService> _logger;
-    private readonly ICommandService<ManualHandleRecordCommand> _service;
+    private readonly ICommandService<HandleRecordCommand> _service;
+    private readonly IUtensil _utensil;
 
     public ManualPullRecordCommandService(
         ILogger<ManualPullRecordCommandService> logger,
         IGameInterfaceJDBClient client,
         IUtensil utensil,
         IGameRecordUtensil gameRecordUtensil,
-        ICommandService<ManualHandleRecordCommand> service)
+        ICommandService<HandleRecordCommand> service)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = client ?? throw new ArgumentNullException(nameof(client));
@@ -29,38 +29,31 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
 
     public async ValueTask ExecuteAsync(ManualPullRecordCommand command, CancellationToken cancellationToken = default)
     {
-        var gameRecords = Enumerable.Empty<GameHistoryInfo>();
-        if (_utensil.TimeDifferenceWithin2Hours(command.EndTime))
-        {
-            gameRecords = await _client
-                .GameHistoryAsync(
-                    apiUrl: command.ApiUrl,
-                    domain: command.Domain,
-                    aesKey: command.AesKey,
-                    aesIV: command.AesIV,
-                    agent: command.Agent,
-                    startTime: command.StartTime.UtcDateTime,
-                    endTime: command.EndTime.UtcDateTime,
-                    cancellationToken: cancellationToken)
-                .ToArrayAsync(cancellationToken).ConfigureAwait(false)
-                ?? Enumerable.Empty<GameHistoryInfo>();
-        }
-        else
-        {
-            gameRecords = await _client
-                .GameOldHistoryAsync(
-                    apiUrl: command.ApiUrl,
-                    domain: command.Domain,
-                    aesKey: command.AesKey,
-                    aesIV: command.AesIV,
-                    agent: command.Agent,
-                    startTime: command.StartTime.UtcDateTime,
-                    endTime: command.EndTime.UtcDateTime,
-                    cancellationToken: cancellationToken)
-                .ToArrayAsync(cancellationToken).ConfigureAwait(false)
-                ?? Enumerable.Empty<GameHistoryInfo>();
-        }
-
+        var gameRecords = _utensil.TimeDifferenceWithin2Hours(command.EndTime)
+            ? await _client
+            .GameHistoryAsync(
+                apiUrl: command.ApiUrl,
+                domain: command.Domain,
+                aesKey: command.AesKey,
+                aesIV: command.AesIV,
+                agent: command.Agent,
+                startTime: command.StartTime.UtcDateTime,
+                endTime: command.EndTime.UtcDateTime,
+                cancellationToken: cancellationToken)
+            .ToArrayAsync(cancellationToken).ConfigureAwait(false)
+            ?? Enumerable.Empty<GameHistoryInfo>()
+            : await _client
+            .GameOldHistoryAsync(
+                apiUrl: command.ApiUrl,
+                domain: command.Domain,
+                aesKey: command.AesKey,
+                aesIV: command.AesIV,
+                agent: command.Agent,
+                startTime: command.StartTime.UtcDateTime,
+                endTime: command.EndTime.UtcDateTime,
+                cancellationToken: cancellationToken)
+            .ToArrayAsync(cancellationToken).ConfigureAwait(false)
+            ?? Enumerable.Empty<GameHistoryInfo>();
 
         _logger.LogDebug("LogOn:{logOn} GameRecords:{gameRecords}", DateTime.Now.ToString("o"), gameRecords);
 

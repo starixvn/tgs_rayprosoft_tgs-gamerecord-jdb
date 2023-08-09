@@ -2,19 +2,19 @@
 using NSubstitute;
 using Tgs.GameRecord.JDBService.Core.ApplicationServices;
 using Tgs.GameRecord.JDBService.Core.Models;
-using Tgs.GameRounds.Work.Manual.Client;
-using Tgs.GameRounds.Work.Manual.Common.Protos;
+using Tgs.GameRounds.Work.Client;
+using Tgs.GameRounds.Work.Common.Protos;
 
 namespace Tgs.GameRecord.JDBService.Core.UnitTest.ApplicationServices;
 
-public class ManualHandleRecordCommandServiceUnitTest
+public class HandleRecordCommandServiceUnitTest
 {
     [Fact]
     public async void Normal_Process_Settlement_Loss()
     {
-        var fakeClient = Substitute.For<IGameRoundsWorkManualClient>();
+        var fakeClient = Substitute.For<IGameRoundsWorkClient>();
 
-        var command = new ManualHandleRecordCommand(
+        var command = new HandleRecordCommand(
             Record: new RecordInfo(
                 Success: true,
                 GameProviderId: Guid.NewGuid(),
@@ -38,7 +38,7 @@ public class ManualHandleRecordCommandServiceUnitTest
                 AdditionalData: "{\"recordID\": \"643583c37c18c573b57bbb2c\"}"
                 ));
 
-        var service = new ManualHandleRecordCommandService(fakeClient);
+        var service = new HandleRecordCommandService(fakeClient);
 
         await service
             .ExecuteAsync(
@@ -76,9 +76,9 @@ public class ManualHandleRecordCommandServiceUnitTest
     [Fact]
     public async void Normal_Process_Settlement_Win()
     {
-        var fakeClient = Substitute.For<IGameRoundsWorkManualClient>();
+        var fakeClient = Substitute.For<IGameRoundsWorkClient>();
 
-        var command = new ManualHandleRecordCommand(
+        var command = new HandleRecordCommand(
             Record: new RecordInfo(
                 Success: true,
                 GameProviderId: Guid.NewGuid(),
@@ -102,7 +102,7 @@ public class ManualHandleRecordCommandServiceUnitTest
                 AdditionalData: "{\"recordID\": \"643583c37c18c573b57bbb2c\"}"
                 ));
 
-        var service = new ManualHandleRecordCommandService(fakeClient);
+        var service = new HandleRecordCommandService(fakeClient);
 
         await service
             .ExecuteAsync(
@@ -140,9 +140,9 @@ public class ManualHandleRecordCommandServiceUnitTest
     [Fact]
     public async void Normal_Process_Success_Is_False()
     {
-        var fakeClient = Substitute.For<IGameRoundsWorkManualClient>();
+        var fakeClient = Substitute.For<IGameRoundsWorkClient>();
 
-        var command = new ManualHandleRecordCommand(
+        var command = new HandleRecordCommand(
             Record: new RecordInfo(
                 Success: false,
                 GameProviderId: Guid.NewGuid(),
@@ -166,7 +166,7 @@ public class ManualHandleRecordCommandServiceUnitTest
                 AdditionalData: "{\"recordID\": \"643583c37c18c573b57bbb2c\"}"
                 ));
 
-        var service = new ManualHandleRecordCommandService(fakeClient);
+        var service = new HandleRecordCommandService(fakeClient);
 
         await service
             .ExecuteAsync(
