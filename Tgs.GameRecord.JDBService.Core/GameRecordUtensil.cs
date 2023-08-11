@@ -25,8 +25,6 @@ internal class GameRecordUtensil : IGameRecordUtensil
         var gameProviderCode = _utensil
             .GetGameProviderCode();
 
-        bool success = true;
-
         var player = await _utensil
             .GetPlayerAsync(
                 playerCode: source.PlayerCode,
@@ -39,25 +37,12 @@ internal class GameRecordUtensil : IGameRecordUtensil
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        if (player == null || !gameId.HasValue)
-        {
-            success = false;
-        }
-
-        Guid? gameProviderConfigurationId = default;
-        if (player != null)
-        {
-            gameProviderConfigurationId = await _utensil
-                .GetBrandGameProviderConfigurationIdAsync(
-                    brandId: player.BrandId,
-                    gameProviderId: gameProviderId,
-                    cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
-            if (!gameProviderConfigurationId.HasValue)
-            {
-                success = false;
-            }
-        }
+        var gameProviderConfigurationId = await _utensil
+            .GetBrandGameProviderConfigurationIdAsync(
+            brandId: player.BrandId,
+            gameProviderId: gameProviderId,
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         var externalCreatedOn = source.ExternalCreatedOn.ToDateTimeOffset();
         var externalClosedOn = source.ExternalClosedOn.ToDateTimeOffset();
@@ -69,17 +54,16 @@ internal class GameRecordUtensil : IGameRecordUtensil
         var commission = 0;
 
         return new RecordInfo(
-            Success: success,
             GameProviderId: gameProviderId,
             GameProviderCode: gameProviderCode,
             ExternalRoundId: source.ExternalRoundId,
-            GameId: gameId ?? -1,
+            GameId: gameId,
             ExternalGameId: source.ExternalGameId.ToString(),
-            PlayerCode: (player == null) ? string.Empty : player.PlayerCode,
-            WalletId: (player == null) ? Guid.Empty : player.DefaultWalletId,
-            CurrencyCode: (player == null) ? string.Empty : player.DefaultWalletCurrencyCode,
-            BrandId: (player == null) ? Guid.Empty : player.BrandId,
-            GameProviderConfigurationId: gameProviderConfigurationId ?? Guid.Empty,
+            PlayerCode: player.PlayerCode,
+            WalletId: player.DefaultWalletId,
+            CurrencyCode: player.DefaultWalletCurrencyCode,
+            BrandId: player.BrandId,
+            GameProviderConfigurationId: gameProviderConfigurationId,
             ExternalCreatedOn: externalCreatedOn,
             ExternalClosedOn: externalClosedOn,
             Bet: bet,

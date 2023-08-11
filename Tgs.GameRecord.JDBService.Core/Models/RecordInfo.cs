@@ -1,7 +1,6 @@
 ﻿namespace Tgs.GameRecord.JDBService.Core.Models;
 
 public record RecordInfo(
-    bool Success,
     Guid GameProviderId,
     string GameProviderCode,
     string ExternalRoundId,
