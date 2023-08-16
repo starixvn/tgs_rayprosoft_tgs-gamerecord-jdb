@@ -8,7 +8,6 @@ namespace Tgs.GameRecord.JDBService.Core.ApplicationServices;
 internal class ManualPullRecordCommandService : ICommandService<ManualPullRecordCommand>
 {
     private readonly IGameInterfaceJDBClient _client;
-    private readonly IGameRecordUtensil _gameRecordUtensil;
     private readonly ILogger<ManualPullRecordCommandService> _logger;
     private readonly ICommandService<HandleRecordCommand> _service;
     private readonly IUtensil _utensil;
@@ -17,13 +16,11 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
         ILogger<ManualPullRecordCommandService> logger,
         IGameInterfaceJDBClient client,
         IUtensil utensil,
-        IGameRecordUtensil gameRecordUtensil,
         ICommandService<HandleRecordCommand> service)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _utensil = utensil ?? throw new ArgumentNullException(nameof(utensil));
-        _gameRecordUtensil = gameRecordUtensil ?? throw new ArgumentNullException(nameof(gameRecordUtensil));
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
@@ -63,23 +60,15 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
 
             try
             {
-                var record = await _gameRecordUtensil
-                    .SettlementConvertRecordAsync(
-                        source: gameRecord,
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-
-                _logger.LogDebug("LogOn:{logOn} Message: Settlement. Record:{record}", DateTime.Now.ToString("o"), record);
-
                 await _service
                     .ExecuteAsync(
-                        command: new(record),
-                        cancellationToken: cancellationToken)
+                    command: new(gameRecord),
+                    cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "LogOn:{logOn} Message: Settlement Exception. GameRecord:{gameRecord}", DateTime.Now.ToString("o"), gameRecord);
+                _logger.LogError(ex, "LogOn:{logOn} Message: An exception occurred in this game record.({gameRecord})", DateTime.Now.ToString("o"), gameRecord);
             }
         }
     }
