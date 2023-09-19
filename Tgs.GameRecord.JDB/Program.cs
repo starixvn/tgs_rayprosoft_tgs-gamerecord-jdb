@@ -8,6 +8,7 @@ using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.GameRecord.JDB;
 using Tgs.GameRecord.JDB.Core;
 using Tgs.GameRecord.JDB.Messages;
 
@@ -148,6 +149,17 @@ var app = builder.Build();
 
 _ = app.UseSwagger();
 _ = app.UseSwaggerUI();
+
+app.UseHangfireDashboard(
+    "/hangfire",
+    new DashboardOptions()
+    {
+        Authorization =
+        new[]
+        {
+            new IgnoreHangfireAuthorizationFilter()
+        }
+    });
 
 _ = app.UseAuthorization();
 
