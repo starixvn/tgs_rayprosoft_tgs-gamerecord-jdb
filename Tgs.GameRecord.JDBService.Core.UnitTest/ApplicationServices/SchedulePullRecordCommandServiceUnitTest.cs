@@ -30,23 +30,19 @@ public class SchedulePullRecordCommandServiceUnitTest
             fakeClient,
             fakeService);
 
-        await service
-            .ExecuteAsync(
-                command: command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command: command);
 
         _ = await fakeClient
             .Received(1)
-            .GameHistoryAsync(
-                apiUrl: Arg.Is(command.ApiUrl),
-                domain: Arg.Is(command.Domain),
-                aesKey: Arg.Is(command.AesKey),
-                aesIV: Arg.Is(command.AesIV),
-                agent: Arg.Is(command.Agent),
-                startTime: Arg.Is(command.StartTime.UtcDateTime),
-                endTime: Arg.Is(command.EndTime.UtcDateTime),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+            .GameWagerAsync(
+            apiUrl: Arg.Is(command.ApiUrl),
+            domain: Arg.Is(command.Domain),
+            aesKey: Arg.Is(command.AesKey),
+            aesIV: Arg.Is(command.AesIV),
+            agent: Arg.Is(command.Agent),
+            startTime: Arg.Is(command.StartTime.UtcDateTime),
+            endTime: Arg.Is(command.EndTime.UtcDateTime),
+            cancellationToken: Arg.Any<CancellationToken>())
+            .ToArrayAsync();
     }
 }

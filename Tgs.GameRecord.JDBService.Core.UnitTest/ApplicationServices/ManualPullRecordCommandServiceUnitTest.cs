@@ -37,14 +37,11 @@ public class ManualPullRecordCommandServiceUnitTest
             fakeUtensil,
             fakeService);
 
-        await service
-            .ExecuteAsync(
-                command: command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command: command);
 
         _ = await fakeClient
             .Received(0)
-            .GameHistoryAsync(
+            .GameWagerAsync(
                 apiUrl: Arg.Is(command.ApiUrl),
                 domain: Arg.Is(command.Domain),
                 aesKey: Arg.Is(command.AesKey),
@@ -53,12 +50,11 @@ public class ManualPullRecordCommandServiceUnitTest
                 startTime: Arg.Is(command.StartTime.UtcDateTime),
                 endTime: Arg.Is(command.EndTime.UtcDateTime),
                 cancellationToken: Arg.Any<CancellationToken>())
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ToArrayAsync();
 
         _ = await fakeClient
             .Received(1)
-            .GameOldHistoryAsync(
+            .GameWagerOldAsync(
                 apiUrl: Arg.Is(command.ApiUrl),
                 domain: Arg.Is(command.Domain),
                 aesKey: Arg.Is(command.AesKey),
@@ -67,8 +63,7 @@ public class ManualPullRecordCommandServiceUnitTest
                 startTime: Arg.Is(command.StartTime.UtcDateTime),
                 endTime: Arg.Is(command.EndTime.UtcDateTime),
                 cancellationToken: Arg.Any<CancellationToken>())
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ToArrayAsync();
     }
 
     [Fact]
@@ -99,37 +94,32 @@ public class ManualPullRecordCommandServiceUnitTest
             fakeUtensil,
             fakeService);
 
-        await service
-            .ExecuteAsync(
-                command: command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command: command);
 
         _ = await fakeClient
             .Received(1)
-            .GameHistoryAsync(
-                apiUrl: Arg.Is(command.ApiUrl),
-                domain: Arg.Is(command.Domain),
-                aesKey: Arg.Is(command.AesKey),
-                aesIV: Arg.Is(command.AesIV),
-                agent: Arg.Is(command.Agent),
-                startTime: Arg.Is(command.StartTime.UtcDateTime),
-                endTime: Arg.Is(command.EndTime.UtcDateTime),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+            .GameWagerAsync(
+            apiUrl: Arg.Is(command.ApiUrl),
+            domain: Arg.Is(command.Domain),
+            aesKey: Arg.Is(command.AesKey),
+            aesIV: Arg.Is(command.AesIV),
+            agent: Arg.Is(command.Agent),
+            startTime: Arg.Is(command.StartTime.UtcDateTime),
+            endTime: Arg.Is(command.EndTime.UtcDateTime),
+            cancellationToken: Arg.Any<CancellationToken>())
+            .ToArrayAsync();
 
         _ = await fakeClient
             .Received(0)
-            .GameOldHistoryAsync(
-                apiUrl: Arg.Is(command.ApiUrl),
-                domain: Arg.Is(command.Domain),
-                aesKey: Arg.Is(command.AesKey),
-                aesIV: Arg.Is(command.AesIV),
-                agent: Arg.Is(command.Agent),
-                startTime: Arg.Is(command.StartTime.UtcDateTime),
-                endTime: Arg.Is(command.EndTime.UtcDateTime),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+            .GameWagerOldAsync(
+            apiUrl: Arg.Is(command.ApiUrl),
+            domain: Arg.Is(command.Domain),
+            aesKey: Arg.Is(command.AesKey),
+            aesIV: Arg.Is(command.AesIV),
+            agent: Arg.Is(command.Agent),
+            startTime: Arg.Is(command.StartTime.UtcDateTime),
+            endTime: Arg.Is(command.EndTime.UtcDateTime),
+            cancellationToken: Arg.Any<CancellationToken>())
+            .ToArrayAsync();
     }
 }

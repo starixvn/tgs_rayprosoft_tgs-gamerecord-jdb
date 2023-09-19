@@ -28,7 +28,7 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
     {
         var gameRecords = _utensil.TimeDifferenceWithin2Hours(command.EndTime)
             ? await _client
-            .GameHistoryAsync(
+            .GameWagerAsync(
                 apiUrl: command.ApiUrl,
                 domain: command.Domain,
                 aesKey: command.AesKey,
@@ -38,9 +38,9 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
                 endTime: command.EndTime.UtcDateTime,
                 cancellationToken: cancellationToken)
             .ToArrayAsync(cancellationToken).ConfigureAwait(false)
-            ?? Enumerable.Empty<GameHistoryInfo>()
+            ?? Enumerable.Empty<GameWagerInfo>()
             : await _client
-            .GameOldHistoryAsync(
+            .GameWagerOldAsync(
                 apiUrl: command.ApiUrl,
                 domain: command.Domain,
                 aesKey: command.AesKey,
@@ -50,7 +50,7 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
                 endTime: command.EndTime.UtcDateTime,
                 cancellationToken: cancellationToken)
             .ToArrayAsync(cancellationToken).ConfigureAwait(false)
-            ?? Enumerable.Empty<GameHistoryInfo>();
+            ?? Enumerable.Empty<GameWagerInfo>();
 
         _logger.LogDebug("LogOn:{logOn} GameRecords:{gameRecords}", DateTime.Now.ToString("o"), gameRecords);
 

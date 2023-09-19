@@ -1,6 +1,6 @@
 ﻿using Tgs.GameRecord.JDBService.Core;
 using Tgs.GameRounds.Schedule.Common.Protos;
-using Tgs.MessageQueue;
+using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.JDBService.Messages;
 

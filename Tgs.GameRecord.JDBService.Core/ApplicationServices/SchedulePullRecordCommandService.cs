@@ -24,7 +24,7 @@ internal class SchedulePullRecordCommandService : ICommandService<SchedulePullRe
     public async ValueTask ExecuteAsync(SchedulePullRecordCommand command, CancellationToken cancellationToken = default)
     {
         var gameRecords = await _client
-            .GameHistoryAsync(
+            .GameWagerAsync(
                 apiUrl: command.ApiUrl,
                 domain: command.Domain,
                 aesKey: command.AesKey,
@@ -34,7 +34,7 @@ internal class SchedulePullRecordCommandService : ICommandService<SchedulePullRe
                 endTime: command.EndTime.UtcDateTime,
                 cancellationToken: cancellationToken)
             .ToArrayAsync(cancellationToken).ConfigureAwait(false)
-            ?? Enumerable.Empty<GameHistoryInfo>();
+            ?? Enumerable.Empty<GameWagerInfo>();
 
         _logger.LogDebug("LogOn:{logOn} GameRecords:{gameRecords}", DateTime.Now.ToString("o"), gameRecords);
 

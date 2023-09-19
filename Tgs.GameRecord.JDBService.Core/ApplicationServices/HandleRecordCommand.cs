@@ -2,4 +2,4 @@
 
 namespace Tgs.GameRecord.JDBService.Core.ApplicationServices;
 
-public record HandleRecordCommand(GameHistoryInfo Record);
+public record HandleRecordCommand(GameWagerInfo Record);
