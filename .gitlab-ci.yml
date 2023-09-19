@@ -1,8 +1,8 @@
 variables:
-  ImageName: pgtgs/game-gamerecord-jdb-service
-  SettingKey: game-gamerecord-jdb-service
-  HelmTemplateFolderName: game-gamerecord-jdb-service
-  BuildCacheKey: Tgs.GameRecord.JDBService.$CI_PIPELINE_ID
+  ImageName: pgtgs/game-gamerecord-jdb
+  SettingKey: game-gamerecord-jdb
+  HelmTemplateFolderName: game-gamerecord-jdb
+  BuildCacheKey: Tgs.GameRecord.JDB.$CI_PIPELINE_ID
 
 default:
   before_script:
@@ -59,7 +59,7 @@ push-docker-image:
     untracked: true   
     policy: pull
   script:
-    - dotnet build "Tgs.GameRecord.JDBService/Tgs.GameRecord.JDBService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:$Tag" --no-restore
+    - dotnet build "Tgs.GameRecord.JDB/Tgs.GameRecord.JDB.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:$Tag" --no-restore
     - docker push $ImageName:$Tag
 
 push-k8s-template:
