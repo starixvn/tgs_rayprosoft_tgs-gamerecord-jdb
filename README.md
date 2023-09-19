@@ -1,4 +1,4 @@
-# tgs-gamerecord-jdb-service
+# tgs-gamerecord-jdb
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/rayprosoft/tgs-gamerecord-jdb-service.git
+git remote add origin https://gitlab.com/rayprosoft/tgs-gamerecord-jdb.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/rayprosoft/tgs-gamerecord-jdb-service/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/rayprosoft/tgs-gamerecord-jdb/-/settings/integrations)
 
 ## Collaborate with your team
 
