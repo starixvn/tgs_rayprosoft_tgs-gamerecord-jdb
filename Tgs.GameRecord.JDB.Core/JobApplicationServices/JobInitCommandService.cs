@@ -94,7 +94,7 @@ internal class JobInitCommandService : ICommandService<JobInitCommand>
                     ?? settingConfigurationJson["AesKey"]?.ToString()
                     ?? throw new Exception($"{gameProviderConfig.Name} Required parameters(AesKey)");
 
-                if (gameProviderAgentMapper.ContainsKey(gameProviderConfig.Name))
+                if (gameProviderAgentMapper.ContainsKey(agent))
                 {
                     continue;
                 }
@@ -108,10 +108,12 @@ internal class JobInitCommandService : ICommandService<JobInitCommand>
                     AesIV: aesIV,
                     Agent: agent);
 
-                gameProviderAgentMapper.Add(gameProviderConfig.Name, jobExecuteCommand);
+                gameProviderAgentMapper.Add(agent, jobExecuteCommand);
+
+                var recurringJobId = $"{gameProviderConfig.Name}|{agent}|{gameProviderConfig.GameProviderConfigId}";
 
                 RecurringJob.AddOrUpdate<IHangfireUtensil>(
-                    recurringJobId: gameProviderConfig.Name,
+                    recurringJobId: recurringJobId,
                     methodCall: service => service.JobExecuteAsync(jobExecuteCommand),
                     cronExpression: Cron.Minutely(),
                     options: _recurringJobOptions);
