@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using Tgs.GameRecord.JDB.Core;
+using Tgs.GameRecord.JDB;
 
-namespace Tgs.GameRecord.JDB.Core;
+namespace Tgs.GameRecord.JDB;
 
 internal class RedisConnectionManager : IDisposable
 {

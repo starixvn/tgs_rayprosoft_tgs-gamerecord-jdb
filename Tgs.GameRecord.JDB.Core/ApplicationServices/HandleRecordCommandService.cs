@@ -1,22 +1,16 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Text.Json.Nodes;
+using Microsoft.Extensions.Options;
 using Tgs.GameRecord.Handle.Client;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.JDB.Core.ApplicationServices;
 
-internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
+internal class HandleRecordCommandService(
+    IOptions<GameRecordInfoOptions> options,
+    IGameRecordHandleClient client) : ICommandService<HandleRecordCommand>
 {
-    private readonly IGameRecordHandleClient _client;
-    private readonly GameRecordInfoOptions _gameRecordInfo;
-
-    public HandleRecordCommandService(
-        IOptions<GameRecordInfoOptions> options,
-        IGameRecordHandleClient client)
-    {
-        _gameRecordInfo = options.Value;
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-    }
+    private readonly GameRecordInfoOptions _gameRecordInfo = options.Value;
 
     public async ValueTask ExecuteAsync(HandleRecordCommand command, CancellationToken cancellationToken = default)
     {
@@ -30,7 +24,7 @@ internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
         var commission = 0.0m;
         var wagerState = winLoss <= 0 ? WagerStates.Lose : WagerStates.Win;
 
-        await _client
+        await client
         .MessageAsync(
             gameProviderCode: _gameRecordInfo.GameProviderCode,
             playerCode: command.Record.PlayerCode,
@@ -53,7 +47,7 @@ internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
             commission: commission,
             turnover: bet,
             winLoss: winLoss,
-            additionalData: command.Record.AdditionalData,
+            additionalData: JsonNode.Parse(command.Record.AdditionalData)!,
             cancellationToken: cancellationToken)
         .ConfigureAwait(false);
     }

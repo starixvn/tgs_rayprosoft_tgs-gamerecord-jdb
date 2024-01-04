@@ -89,7 +89,7 @@ public class HandleRecordCommandServiceUnitTest
             commission: Arg.Is(0.0m),
             turnover: Arg.Is(command.Record.Bet.ToDecimal().GetValueOrDefault(0)),
             winLoss: Arg.Is(command.Record.WinLoss.ToDecimal().GetValueOrDefault(0)),
-            additionalData: Arg.Is(command.Record.AdditionalData),
+            additionalData: Arg.Any<JsonNode>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 
@@ -150,7 +150,7 @@ public class HandleRecordCommandServiceUnitTest
             commission: Arg.Is(0.0m),
             turnover: Arg.Is(command.Record.Bet.ToDecimal().GetValueOrDefault(0)),
             winLoss: Arg.Is(command.Record.WinLoss.ToDecimal().GetValueOrDefault(0)),
-            additionalData: Arg.Is(command.Record.AdditionalData),
+            additionalData: Arg.Any<JsonNode>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 
@@ -211,7 +211,7 @@ public class HandleRecordCommandServiceUnitTest
             commission: Arg.Is(0.0m),
             turnover: Arg.Is(command.Record.Bet.ToDecimal().GetValueOrDefault(0)),
             winLoss: Arg.Is(command.Record.WinLoss.ToDecimal().GetValueOrDefault(0)),
-            additionalData: Arg.Is(command.Record.AdditionalData),
+            additionalData: Arg.Any<JsonNode>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 }

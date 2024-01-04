@@ -1,10 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Tgs.GameRecord.JDB.ViewModels;
+namespace Tgs.GameRecord.JDB.Common;
 
-public record JDBViewModel
+public record JDBGameRecordMessage
 {
     [Required]
+    [DataType(DataType.Url)]
     public Uri ApiUrl { get; init; } = default!;
     [Required]
     public string Domain { get; init; } = default!;
@@ -16,8 +22,8 @@ public record JDBViewModel
     public string Agent { get; init; } = default!;
     [Required]
     [DataType(DataType.DateTime)]
-    public DateTime StartTime { get; init; }
+    public DateTimeOffset StartTime { get; init; }
     [Required]
     [DataType(DataType.DateTime)]
-    public DateTime EndTime { get; init; }
+    public DateTimeOffset EndTime { get; init; }
 }

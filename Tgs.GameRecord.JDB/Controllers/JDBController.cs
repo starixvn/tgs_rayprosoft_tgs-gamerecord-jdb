@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Tgs.GameRecord.JDB.Core;
-using Tgs.GameRecord.JDB.ViewModels;
-using Tgs.GameRounds.Schedule.Client;
-using Tgs.GameRounds.Schedule.Protos;
+﻿using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Tgs.GameRecord.JDB.Common;
+using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.JDB.Controllers;
 
@@ -11,18 +10,10 @@ namespace Tgs.GameRecord.JDB.Controllers;
 [ApiController]
 public class JDBController : ControllerBase
 {
-    private readonly GameRecordInfoOptions _gameRecordInfo;
-
-    public JDBController(
-        IOptions<GameRecordInfoOptions> options)
-    {
-        _gameRecordInfo = options.Value; ;
-    }
-
     /// <summary>
-    /// Manuals the game record asynchronous.
+    /// Games the record manual asynchronous.
     /// </summary>
-    /// <param name="client">The client.</param>
+    /// <param name="messageSender">The message sender.</param>
     /// <param name="source">The source.</param>
     /// <returns></returns>
     /// <remarks>
@@ -40,27 +31,18 @@ public class JDBController : ControllerBase
     ///         }
     /// </remarks>
     [HttpPost("manual")]
-    public ValueTask ManualGameRecordAsync(
-        [FromServices] IGameRoundsScheduleClient client,
-        JDBViewModel source)
-        => client.JDB_ScheduleFormQueuedAsync(
-             gameProviderCode: _gameRecordInfo.GameProviderCode,
-             name: source.Agent,
-             subject: "gp.gamerecord.scheduleform.jdbtf.queued",
-             source: ScheduleFormSource.Manual,
-             apiUrl: source.ApiUrl,
-             domain: source.Domain,
-             aesKey: source.AesKey,
-             aesIV: source.AesIV,
-             agent: source.Agent,
-             startTime: source.StartTime,
-             endTime: source.EndTime,
-             cancellationToken: HttpContext.RequestAborted);
+    public ValueTask GameRecordManualAsync(
+        [FromServices] IMessageSender messageSender,
+        JDBGameRecordMessage source)
+        => messageSender.PublishAsync(
+            subject: JDBNatsConst.ManualPublish,
+            data: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(source)),
+            cancellationToken: HttpContext.RequestAborted);
 
     /// <summary>
-    /// Schedules the game record asynchronous.
+    /// Games the record schedule asynchronous.
     /// </summary>
-    /// <param name="client">The client.</param>
+    /// <param name="messageSender">The message sender.</param>
     /// <param name="source">The source.</param>
     /// <returns></returns>
     /// <remarks>
@@ -78,20 +60,11 @@ public class JDBController : ControllerBase
     ///         }
     /// </remarks>
     [HttpPost("schedule")]
-    public ValueTask ScheduleGameRecordAsync(
-        [FromServices] IGameRoundsScheduleClient client,
-        JDBViewModel source)
-        => client.JDB_ScheduleFormQueuedAsync(
-             gameProviderCode: _gameRecordInfo.GameProviderCode,
-             name: source.Agent,
-             subject: "gp.gamerecord.scheduleform.jdbtf.queued",
-             source: ScheduleFormSource.Manual,
-             apiUrl: source.ApiUrl,
-             domain: source.Domain,
-             aesKey: source.AesKey,
-             aesIV: source.AesIV,
-             agent: source.Agent,
-             startTime: source.StartTime,
-             endTime: source.EndTime,
-             cancellationToken: HttpContext.RequestAborted);
+    public ValueTask GameRecordScheduleAsync(
+        [FromServices] IMessageSender messageSender,
+        JDBGameRecordMessage source)
+        => messageSender.PublishAsync(
+            subject: JDBNatsConst.SchedulePublish,
+            data: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(source)),
+            cancellationToken: HttpContext.RequestAborted);
 }
