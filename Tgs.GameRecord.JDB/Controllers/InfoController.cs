@@ -2,13 +2,15 @@
 using System.Net.Sockets;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Tgs.GameRecord.JDB.Core;
 
 namespace Tgs.GameRecord.JDB.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class InfoController(IConfiguration configuration) : ControllerBase
+public class InfoController(
+    IOptions<GameRecordInfoOptions> gameRecordInfoOptions) : ControllerBase
 {
     [HttpGet]
     public async Task<object> GetAsync([FromServices] IWebHostEnvironment _hostingEnvironment)
@@ -17,7 +19,6 @@ public class InfoController(IConfiguration configuration) : ControllerBase
         var hostEntry = await Dns.GetHostEntryAsync(hostName);
         var hostIp = Array.Find(hostEntry.AddressList,
             x => x.AddressFamily == AddressFamily.InterNetwork);
-        var gameRecordInfo = configuration.GetSection("GameRecordInfo").Get<GameRecordInfoOptions>();
 
         return new
         {
@@ -28,7 +29,7 @@ public class InfoController(IConfiguration configuration) : ControllerBase
             OsVersion = $"{Environment.OSVersion}",
             Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(),
             ProcessCount = Environment.ProcessorCount,
-            gameRecordInfo,
+            GameRecordInfoOptions = gameRecordInfoOptions.Value
         };
     }
 }
