@@ -23,6 +23,7 @@ public class HandleRecordCommandServiceUnitTest
         var command = new HandleRecordCommand(
             Record: new GameWagerInfo
             {
+                ExternalRoundId = "5250214464421",
                 ExternalWagerId = "5250214464421",
                 ExternalGameId = "0_15010",
                 PlayerCode = "4ugse0rsnufp",
@@ -76,7 +77,7 @@ public class HandleRecordCommandServiceUnitTest
             gambleState: Arg.Is(GambleStates.None),
             cashoutState: Arg.Is(CashoutStates.None),
             resettleState: Arg.Is(ResettleStates.None),
-            externalRoundId: Arg.Is(command.Record.ExternalWagerId),
+            externalRoundId: Arg.Is(command.Record.ExternalRoundId),
             externalWagerId: Arg.Is(command.Record.ExternalWagerId),
             externalGameId: Arg.Is(command.Record.ExternalGameId),
             externalCreatedOn: Arg.Is(command.Record.ExternalCreatedOn.ToDateTimeOffset()),
@@ -105,6 +106,7 @@ public class HandleRecordCommandServiceUnitTest
         var command = new HandleRecordCommand(
             Record: new GameWagerInfo
             {
+                ExternalRoundId = "7383541906849",
                 ExternalWagerId = "7383541906849",
                 ExternalGameId = "0_14065",
                 PlayerCode = "4uhm33dvljda",
@@ -137,7 +139,7 @@ public class HandleRecordCommandServiceUnitTest
             gambleState: Arg.Is(GambleStates.None),
             cashoutState: Arg.Is(CashoutStates.None),
             resettleState: Arg.Is(ResettleStates.None),
-            externalRoundId: Arg.Is(command.Record.ExternalWagerId),
+            externalRoundId: Arg.Is(command.Record.ExternalRoundId),
             externalWagerId: Arg.Is(command.Record.ExternalWagerId),
             externalGameId: Arg.Is(command.Record.ExternalGameId),
             externalCreatedOn: Arg.Is(command.Record.ExternalCreatedOn.ToDateTimeOffset()),
@@ -166,6 +168,7 @@ public class HandleRecordCommandServiceUnitTest
         var command = new HandleRecordCommand(
             Record: new GameWagerInfo
             {
+                ExternalRoundId= "7383541906849",
                 ExternalWagerId = "7383541906849",
                 ExternalGameId = "0_14065",
                 PlayerCode = "4uhm33dvljda",
@@ -198,7 +201,7 @@ public class HandleRecordCommandServiceUnitTest
             gambleState: Arg.Is(GambleStates.None),
             cashoutState: Arg.Is(CashoutStates.None),
             resettleState: Arg.Is(ResettleStates.None),
-            externalRoundId: Arg.Is(command.Record.ExternalWagerId),
+            externalRoundId: Arg.Is(command.Record.ExternalRoundId),
             externalWagerId: Arg.Is(command.Record.ExternalWagerId),
             externalGameId: Arg.Is(command.Record.ExternalGameId),
             externalCreatedOn: Arg.Is(command.Record.ExternalCreatedOn.ToDateTimeOffset()),
