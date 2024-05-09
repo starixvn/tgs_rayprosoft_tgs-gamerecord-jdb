@@ -6,42 +6,42 @@ using Tgs.ServiceUtility;
 namespace Tgs.GameRecord.JDB.Core.ApplicationServices;
 
 internal class SchedulePullRecordCommandService(
-    ILogger<SchedulePullRecordCommandService> logger,
-    IGameInterfaceJDBClient client,
-    ICommandService<HandleRecordCommand> service) : ICommandService<SchedulePullRecordCommand>
+	ILogger<SchedulePullRecordCommandService> logger,
+	IGameInterfaceJDBClient client,
+	ICommandService<HandleRecordCommand> service) : ICommandService<SchedulePullRecordCommand>
 {
-    public async ValueTask ExecuteAsync(SchedulePullRecordCommand command, CancellationToken cancellationToken = default)
-    {
-        var gameRecords = await client.GameWagerAsync(
-            apiUrl: command.ApiUrl,
-            domain: command.Domain,
-            aesKey: command.AesKey,
-            aesIV: command.AesIV,
-            agent: command.Agent,
-            startTime: command.StartTime.UtcDateTime,
-            endTime: command.EndTime.UtcDateTime,
-            cancellationToken: cancellationToken)
-            .ToArrayAsync(cancellationToken).ConfigureAwait(false)
-            ?? Enumerable.Empty<GameWagerInfo>();
+	public async ValueTask ExecuteAsync(SchedulePullRecordCommand command, CancellationToken cancellationToken = default)
+	{
+		var gameRecords = await client.GameWagerAsync(
+			apiUrl: command.ApiUrl,
+			domain: command.Domain,
+			aesKey: command.AesKey,
+			aesIV: command.AesIV,
+			agent: command.Agent,
+			startTime: command.StartTime.UtcDateTime,
+			endTime: command.EndTime.UtcDateTime,
+			cancellationToken: cancellationToken)
+			.ToArrayAsync(cancellationToken).ConfigureAwait(false)
+			?? Enumerable.Empty<GameWagerInfo>();
 
-        logger.LogDebug("LogOn:{logOn} GameRecords:{gameRecords}", DateTime.Now.ToString("o"), gameRecords);
+		logger.LogDebug("LogOn:{logOn} GameRecords:{gameRecords}", DateTime.Now.ToString("o"), gameRecords);
 
-        foreach (var gameRecord in gameRecords)
-        {
-            logger.LogDebug("LogOn:{logOn} Message: Settlement. GameRecord:{gameRecord}", DateTime.Now.ToString("o"), gameRecord);
+		foreach (var gameRecord in gameRecords)
+		{
+			logger.LogDebug("LogOn:{logOn} Message: Settlement. GameRecord:{gameRecord}", DateTime.Now.ToString("o"), gameRecord);
 
-            try
-            {
-                await service
-                    .ExecuteAsync(
-                    command: new(gameRecord),
-                    cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "LogOn:{logOn} Message: An exception occurred in this game record.({gameRecord})", DateTime.Now.ToString("o"), gameRecord);
-            }
-        }
-    }
+			try
+			{
+				await service
+					.ExecuteAsync(
+					command: new(gameRecord),
+					cancellationToken: cancellationToken)
+					.ConfigureAwait(false);
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "LogOn:{logOn} Message: An exception occurred in this game record.({gameRecord})", DateTime.Now.ToString("o"), gameRecord);
+			}
+		}
+	}
 }

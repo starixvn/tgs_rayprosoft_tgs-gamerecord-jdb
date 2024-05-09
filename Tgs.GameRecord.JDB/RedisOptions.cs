@@ -1,7 +1,6 @@
-﻿using Tgs.GameRecord.JDB.Core;
-namespace Tgs.GameRecord.JDB;
+﻿namespace Tgs.GameRecord.JDB;
 
 public record RedisOptions
 {
-    public string ConnectionString { get; set; } = "localhost";
+	public string ConnectionString { get; set; } = "localhost";
 }
