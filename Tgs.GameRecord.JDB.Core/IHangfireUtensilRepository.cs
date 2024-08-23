@@ -2,7 +2,7 @@
 
 namespace Tgs.GameRecord.JDB.Core;
 
-public interface IHangfireUtensil
+public interface IHangfireUtensilRepository
 {
 	public Task JobCheckAsync();
 

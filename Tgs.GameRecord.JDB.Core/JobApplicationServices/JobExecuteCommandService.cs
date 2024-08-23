@@ -11,6 +11,7 @@ namespace Tgs.GameRecord.JDB.Core.JobApplicationServices;
 internal class JobExecuteCommandService(
 	ILogger<JobExecuteCommandService> logger,
 	IOptions<GameRecordInfoOptions> options,
+	TimeProvider timeProvider,
 	IMessageSender messageSender) : ICommandService<JobExecuteCommand>
 {
 	private readonly double _intervalMinutes = options.Value.IntervalMinutesMax < options.Value.IntervalMinutes
@@ -26,10 +27,11 @@ internal class JobExecuteCommandService(
 		//查詢時間22/09/12 14:15~14:00會回應{"status":"8006","err_text":"Time does not meet."}
 		//查詢時間22/09/12 14:12~13:56會回應{"status":"8009","err_text":"Time interval exceeds the allowable range."}
 		//查詢時間22/09/12 14:12~13:57會回應{"status":"0000","err_text":"","data:":"[]"}
-		var endTime = DateTimeOffset.ParseExact(DateTimeOffset.UtcNow.AddMinutes(-3).ToString(@"yyyy-MM-dd\THH:mm:00K"), @"yyyy-MM-dd\THH:mm:ssK", null, styles: System.Globalization.DateTimeStyles.RoundtripKind);
-
+		var currentTime = timeProvider.GetUtcNow();
+		var endTime = DateTimeOffset.ParseExact(currentTime.AddMinutes(-3).ToString(@"yyyy-MM-dd\THH:mm:00K"), @"yyyy-MM-dd\THH:mm:ssK", null, styles: System.Globalization.DateTimeStyles.RoundtripKind);
 		var startTime = endTime.AddMinutes(_intervalMinutes * -1);
-		var parameters = new JDBGameRecordMessage
+
+		var message = new JDBGameRecordMessage
 		{
 			ApiUrl = command.ApiUrl,
 			Domain = command.Domain,
@@ -40,11 +42,27 @@ internal class JobExecuteCommandService(
 			EndTime = endTime
 		};
 
-		logger.LogDebug("LogOn:{logOn} Parameters:{parameters}", DateTime.Now.ToString("u"), parameters);
+		logger.LogInformation("{logInformation}",
+			JsonSerializer.Serialize(new
+			{
+				LogOn = DateTime.Now.ToString("u"),
+				Subject = JDBNatsConst.SchedulePublish,
+				Data = new
+				{
+					message.ApiUrl,
+					message.Domain,
+					message.AesKey,
+					message.AesIV,
+					message.Agent,
+					StartTime = message.StartTime.ToString("u"),
+					EndTime = message.EndTime.ToString("u")
+				},
+				Message = "This message publishing handler."
+			}));
 
 		return messageSender.PublishAsync(
 			subject: JDBNatsConst.SchedulePublish,
-			data: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(parameters)),
+			data: JsonSerializer.SerializeToUtf8Bytes(message),
 			cancellationToken: cancellationToken);
 	}
 }
