@@ -3,7 +3,6 @@ using System.Text.Json;
 using Tgs.GameRecord.JDB.Common;
 using Tgs.GameRecord.JDB.Core;
 using Tgs.GameRecord.JDB.Core.ApplicationServices;
-using Tgs.ServiceUtility;
 using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.JDB.Messages;

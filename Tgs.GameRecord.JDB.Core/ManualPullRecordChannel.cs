@@ -7,6 +7,7 @@ using Tgs.GameRecord.JDB.Core.ApplicationServices;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.JDB.Core;
+
 internal class ManualPullRecordChannel(
 	ILogger<ManualPullRecordChannel> logger,
 	IServiceProvider serviceProvider,
@@ -114,7 +115,7 @@ internal class ManualPullRecordChannel(
 			if (reader.TryRead(out var command))
 			{
 				using var activity = _ActivitySource.StartActivity(
-					"SchedulePullRecordChannel handle exchange",
+					"ManualPullRecordChannel handle exchange",
 					 ActivityKind.Internal,
 					parentContext: default);
 				try
